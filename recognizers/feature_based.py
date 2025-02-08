@@ -94,7 +94,7 @@ class FeatureExtractionRecognizer(DifferenceRecognizer):
                 token = batch_encoding.encodings[0].tokens[subword_idx]
                 is_tail = not token.startswith("▁") and token not in self.pipeline.tokenizer.all_special_tokens
             elif isinstance(self.pipeline.tokenizer, transformers.RobertaTokenizerFast) or \
-                    isinstance(self.pipeline.tokenizer, transformers.RobertaTokenizer) or "modernbert" in self.model_name_or_path:
+                    isinstance(self.pipeline.tokenizer, transformers.RobertaTokenizer) or "modernbert" in self.model_name_or_path.lower():
                 token = batch_encoding.encodings[0].tokens[subword_idx]
                 is_tail = not token.startswith("Ġ") and token not in self.pipeline.tokenizer.all_special_tokens
             else:
