@@ -7,13 +7,20 @@ from experiments.utils import load_summary_benchmarks
 from recognizers import DiffAlign
 
 
-benchmarks = load_summary_benchmarks("test")[:1]
+benchmarks = load_summary_benchmarks("test")
 device = 0
 
 recognizers = []
 recognizers.append(DiffAlign(
     pipeline=pipeline(
         model="answerdotai/ModernBERT-base",
+        task="feature-extraction",
+    ),
+    batch_size=4,
+))
+recognizers.append(DiffAlign(
+    pipeline=pipeline(
+        model="answerdotai/ModernBERT-large",
         task="feature-extraction",
     ),
     batch_size=4,
