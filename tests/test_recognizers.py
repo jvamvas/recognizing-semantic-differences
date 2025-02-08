@@ -9,12 +9,12 @@ from recognizers.diff_del import DiffDelWithReencode
 class DiffAlignTestCase(TestCase):
 
     def setUp(self) -> None:
-        self.recognizer = DiffAlign("google/bert_uncased_L-2_H-128_A-2")
+        self.recognizer = DiffAlign("answerdotai/ModernBERT-base")
 
     def test_str(self):
         print(self.recognizer)
         self.assertIn("DiffAlign", str(self.recognizer))
-        self.assertIn("google/bert_uncased_L-2_H-128_A-2", str(self.recognizer))
+        self.assertIn("answerdotai/ModernBERT-base", str(self.recognizer))
 
     def test_predict(self):
         result = self.recognizer.predict(
