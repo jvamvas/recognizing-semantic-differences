@@ -13,15 +13,9 @@ device = 0
 recognizers = []
 recognizers.append(DiffAlign(
     pipeline=pipeline(
-        model="facebook/xlm-roberta-xl",
-        task="feature-extraction",
-    ),
-    batch_size=4,
-))
-recognizers.append(DiffAlign(
-    pipeline=pipeline(
         model="facebook/xlm-roberta-xxl",
         task="feature-extraction",
+        device_map="auto",
     ),
     batch_size=1,
 ))
@@ -29,9 +23,6 @@ recognizers.append(DiffAlign(
 results = OrderedDict()
 for i, recognizer in enumerate(recognizers):
     print(recognizer)
-    recognizer.pipeline.device = device
-    recognizer.device = device
-    recognizer.pipeline.model = recognizer.pipeline.model.to(device)
     recognizer_results = []
     for benchmark in benchmarks:
         print(benchmark)
@@ -43,7 +34,5 @@ for i, recognizer in enumerate(recognizers):
     cross_lingual_mean = sum([result.spearman for result in cross_lingual_results]) / len(cross_lingual_results)
     recognizer_results.append(DifferenceRecognitionResult(spearman=cross_lingual_mean))
     results[str(recognizer)] = recognizer_results
-    recognizers[i] = None
-    del recognizer
 
 print(results)
