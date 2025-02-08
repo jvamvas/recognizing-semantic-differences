@@ -20,7 +20,6 @@ class FeatureExtractionRecognizer(DifferenceRecognizer):
                  batch_size: int = 16,
                  ):
         assert model_name_or_path is not None or pipeline is not None
-        self.model_name_or_path = model_name_or_path
         if pipeline is None:
             pipeline = transformers.pipeline(
                 model=model_name_or_path,
@@ -94,7 +93,7 @@ class FeatureExtractionRecognizer(DifferenceRecognizer):
                 token = batch_encoding.encodings[0].tokens[subword_idx]
                 is_tail = not token.startswith("▁") and token not in self.pipeline.tokenizer.all_special_tokens
             elif isinstance(self.pipeline.tokenizer, transformers.RobertaTokenizerFast) or \
-                    isinstance(self.pipeline.tokenizer, transformers.RobertaTokenizer) or "modernbert" in self.model_name_or_path.lower():
+                    isinstance(self.pipeline.tokenizer, transformers.RobertaTokenizer) or "modernbert" in str(self).lower():
                 token = batch_encoding.encodings[0].tokens[subword_idx]
                 is_tail = not token.startswith("Ġ") and token not in self.pipeline.tokenizer.all_special_tokens
             else:
