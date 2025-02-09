@@ -7,22 +7,31 @@ from experiments.utils import load_summary_benchmarks
 from recognizers import DiffAlign
 
 
-benchmarks = load_summary_benchmarks("test")
+benchmarks = load_summary_benchmarks("validation")
 device = 0
 
 recognizers = []
+# recognizers.append(DiffAlign(
+#    pipeline=pipeline(
+#        model="answerdotai/ModernBERT-base",
+#        task="feature-extraction",
+#    ),
+#    batch_size=4,
+# ))
 recognizers.append(DiffAlign(
     pipeline=pipeline(
-        model="facebook/xlm-roberta-xl",
+        model="answerdotai/ModernBERT-large",
         task="feature-extraction",
-        device_map="auto",
     ),
-    batch_size=1,
+    batch_size=4,
 ))
 
 results = OrderedDict()
 for i, recognizer in enumerate(recognizers):
     print(recognizer)
+    recognizer.pipeline.device = device
+    recognizer.device = device
+    recognizer.pipeline.model = recognizer.pipeline.model.to(device)
     recognizer_results = []
     for benchmark in benchmarks:
         print(benchmark)
@@ -34,5 +43,7 @@ for i, recognizer in enumerate(recognizers):
     cross_lingual_mean = sum([result.spearman for result in cross_lingual_results]) / len(cross_lingual_results)
     recognizer_results.append(DifferenceRecognitionResult(spearman=cross_lingual_mean))
     results[str(recognizer)] = recognizer_results
+    recognizers[i] = None
+    del recognizer
 
 print(results)

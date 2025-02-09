@@ -7,7 +7,7 @@ from experiments.utils import load_summary_benchmarks
 from recognizers import DiffAlign
 
 
-benchmarks = load_summary_benchmarks("test")
+benchmarks = load_summary_benchmarks("validation")
 device = 0
 
 recognizers = []
